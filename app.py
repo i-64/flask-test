@@ -1,17 +1,12 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
-from flask import flash, request, redirect, url_for, send_from_directory
 
-UPLOAD_FOLDER = os.path.join(os.getcwd(),'static')
+UPLOAD_FOLDER = os.path.join(os.getcwd(),'static') # EXTRAA
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg'}
 
-app = Flask(__name__, static_folder='static')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-# @app.route("/")
-# def index():
-#     return render_template("index.html", message="Hello Flask!");
+app = Flask(__name__, static_folder='static') # EXTRAA
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER # EXTRAA
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -20,7 +15,6 @@ def allowed_file(filename):
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
             return redirect(request.url)
@@ -32,24 +26,14 @@ def upload_file():
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            print(filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return ("200 OK")
-            # return redirect(url_for('uploaded_file', filename=filename))
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'test.jpg')) # EXTRAA
+            # return ("200 OK")
+            return redirect(url_for('uploaded_file'))
+    return render_template("index.html")
 
 @app.route('/uploads')
 def uploaded_file():
-    return render_template("index.html", message="Hello Flask!");
-    # return render_template("img.html")
+    return render_template("img.html");
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8000, debug=True)

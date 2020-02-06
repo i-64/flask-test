@@ -2,6 +2,13 @@
 <html>
 <head><title>test</title></head>
 <body>
-<img src="{{url_for('uploads', filename='test.jpg')}}">
+    <div>
+        <div style="width: 15%; float:left; height:100%; margin:10px">
+            <p>objects detected...</p>
+        </div>
+        <div style="width: 80%; float:left; height:100%; margin:10px">
+            <img src="{{url_for('static', filename='test.jpg')}}" style="width=500px;height:500px;">
+        </div>
+    </div>
 </body>
 </html>
